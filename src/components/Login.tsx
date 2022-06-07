@@ -4,28 +4,25 @@ import axios from "axios";
 // import { useAppDispatch } from "../hooks";
 // import { login } from "../actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
-import { bindActionCreators } from "@reduxjs/toolkit";
-import { actionCreators } from "../redux";
-import { State } from "../redux/reducers";
+import { login } from "../store";
 
 export default function Login() {
   const dispatch = useDispatch();
 
-  const { login } = bindActionCreators(actionCreators, dispatch);
-  const state = useSelector((state: State) => state);
-
-  const loginUser = useRef<HTMLInputElement | null>(null);
-  const loginPass = useRef<HTMLInputElement | null>(null);
-
-  // const dispatch = useAppDispatch();
-  // let navigate = useNavigate();
-  // let dispatch = useAppDispatch();
+  const loginUser = useRef<HTMLInputElement>(null);
+  const loginPass = useRef<HTMLInputElement>(null);
 
   const userLogin = async (e: SyntheticEvent) => {
     e.preventDefault();
     if (loginUser.current !== null && loginPass.current !== null) {
-      login(loginUser.current.value, loginPass.current.value);
+      dispatch(
+        login({
+          username: loginUser.current?.value,
+          password: loginPass.current?.value,
+        })
+      );
     }
+    // dispatch(login(loginUser.current?.value, loginPass.current?.value));
 
     // if (response.status === 200) {
     //   navigate("/home");
