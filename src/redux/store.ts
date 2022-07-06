@@ -10,38 +10,34 @@ import { VerifiedStatus } from "../types/VerifiedStatus";
 
 const middleware = [thunk];
 
-const getLoginFromLocalStorage = () => {
-  try {
-    const userInfoFromStorage = localStorage.getItem("loginInfo");
-    if (userInfoFromStorage) {
-      return JSON.parse(userInfoFromStorage);
-    }
-  } catch (err) {
-    console.error(err);
-  }
-};
+// const getLoginFromLocalStorage = () => {
+//   try {
+//     const userInfoFromStorage = localStorage.getItem("loginInfo");
+//     if (userInfoFromStorage) {
+//       return JSON.parse(userInfoFromStorage);
+//     }
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
 
-const preloadedState = {
-  user: {
-    loading: false,
-    loginInfo: getLoginFromLocalStorage(),
-    verified: {},
-  },
-};
+// const preloadedState = {
+//   user: {
+//     loading: false,
+//     loginInfo: getLoginFromLocalStorage(),
+//     verified: { verify: false },
+//   },
+// };
 
-const store = configureStore({
-  reducer: reducers,
-  preloadedState,
-  middleware,
-});
+const store = configureStore({ reducer: reducers, middleware: middleware });
 
 // // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
-// // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+//  Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 // export type AppDispatch = typeof store.dispatch;
 // export const useAppDispatch = () => useDispatch();
 // export type AppThunk = ThunkAction<void, RootState, unknown, Action>;
-export const selectUser = (state: UserState) => state.loginInfo;
-export const selectVerification = (state: VerifiedStatus) => state;
+// export const selectUser = (state: RootState) => state.user;
+// export const selectStore = (state: RootState) => state;
 
 export default store;

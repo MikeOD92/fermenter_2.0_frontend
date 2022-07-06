@@ -1,12 +1,18 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import { selectUser } from "../redux/store";
-import { useSelector } from "react-redux";
+import { useTypedSelector } from "../hooks/useTypedSelector";
+import { UserState } from "../types/userstate";
+import { actionCreators } from "../redux";
+import { bindActionCreators } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 
 const Header: FC = () => {
-  const auth = useAuth();
-  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+  useAuth();
+
+  const user: UserState = useTypedSelector((state) => state.user);
+  const { logout } = bindActionCreators(actionCreators, dispatch);
 
   return (
     <header className="shadow flex">
@@ -17,15 +23,8 @@ const Header: FC = () => {
         <nav>
           <ul className="flex">
             <li className="p-5">
-              {auth ? (
-                <p
-                  onClick={(e) => {
-                    console.log("logout");
-                  }}
-                >
-                  {" "}
-                  Logout{" "}
-                </p>
+              {user?.verified ? (
+                <p onClick={(e) => logout()}> Logout </p>
               ) : (
                 <Link to="/login">Log in </Link>
               )}

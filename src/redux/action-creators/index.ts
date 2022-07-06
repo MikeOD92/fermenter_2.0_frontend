@@ -3,7 +3,9 @@ import axios from "axios";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../store";
 import { AnyAction } from "@reduxjs/toolkit";
-import { LoginInfo } from "../../types/loginInfo";
+import { Dispatch } from "redux";
+import { Action } from "../actions";
+import { UserState } from "../../types/userstate";
 // import { UserState } from "../../types/userstate";
 
 export const login = (
@@ -11,43 +13,58 @@ export const login = (
   password: string
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch) => {
-    const { data } = await axios.post("http://localhost:8000/api/login", {
-      username: username,
-      password: password,
-    });
-    localStorage.setItem("loginInfo", JSON.stringify(data));
     dispatch({
-      type: ActionType.LOGIN,
-      payload: data,
+      type: ActionType.LOGIN_REQUEST,
+    });
+    try {
+      const { data } = await axios.post("http://localhost:8000/api/login", {
+        username: username,
+        password: password,
+      });
+      localStorage.setItem("loginInfo", JSON.stringify(data));
+      dispatch({
+        type: ActionType.LOGIN_SUCCESS,
+        payload: data,
+      });
+    } catch (err: any) {
+      console.error(err);
+      dispatch({
+        type: ActionType.LOGIN_FAIL,
+        payload: err.message,
+      });
+    }
+  };
+};
+
+export const logout = () => {
+  return async (dispatch: Dispatch<Action>) => {
+    localStorage.removeItem("loginInfo");
+    dispatch({
+      type: ActionType.LOGOUT,
     });
   };
 };
 
 export const verify = (
-  user: LoginInfo
+  user: UserState
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch) => {
+    dispatch({
+      type: ActionType.VERIFY_REQUEST,
+    });
     try {
-      const { data } = await axios.post(
-        "http://localhost:8000/api/token/verify/",
-        {
-          token: user.access,
-        }
-      );
-      await console.log(data);
-      if (data.status === 200) {
-        dispatch({
-          type: ActionType.VERIFY,
-          payload: { verify: true },
-        });
-      } else {
-        dispatch({
-          type: ActionType.VERIFY,
-          payload: { verify: false },
-        });
-      }
+      await axios.post("http://localhost:8000/api/token/verify/", {
+        token: user.loginInfo.access,
+      });
+      dispatch({
+        type: ActionType.VERIFY_SUCCESS,
+        payload: true,
+      });
     } catch (err) {
-      console.error(err);
+      dispatch({
+        type: ActionType.VERIFY_FAIL,
+        payload: false,
+      });
     }
   };
 };

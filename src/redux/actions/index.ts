@@ -1,15 +1,18 @@
-import { ActionType } from "../actions-types";
+import {
+  loginAction,
+  loginActionSuccess,
+  loginActionFail,
+  logoutAction,
+  verifyAction,
+  verifyActionSuccess,
+  verifyActionFail,
+} from "./loginActions";
 
-interface LoginAction {
-  type: ActionType.LOGIN;
-  payload: {};
-}
-interface LogoutAction {
-  type: ActionType.LOGOUT;
-}
-interface VerifyAction {
-  type: ActionType.VERIFY;
-  payload: {};
-}
-
-export type Action = LoginAction | LogoutAction | VerifyAction;
+export type Action =
+  | loginAction
+  | loginActionFail
+  | loginActionSuccess
+  | logoutAction
+  | verifyAction
+  | verifyActionSuccess
+  | verifyActionFail;

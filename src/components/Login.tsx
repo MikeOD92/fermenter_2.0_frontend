@@ -1,11 +1,7 @@
 import React, { useRef, SyntheticEvent } from "react";
-import axios from "axios";
 import { actionCreators } from "../redux";
 import { bindActionCreators } from "@reduxjs/toolkit";
-// import { useNavigate } from "react-router-dom";
-// import { useAppDispatch } from "../hooks";
-// import { login } from "../redux/action-creators";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 export default function Login() {
   const dispatch = useDispatch();
