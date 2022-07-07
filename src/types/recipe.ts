@@ -1,3 +1,5 @@
+import { RecipeImage } from "./recipeImg";
+
 export class Recipe {
   id: number;
   title: string;
@@ -7,7 +9,7 @@ export class Recipe {
   ingredients: string;
   method: string;
   comments: Array<Comment>;
-  recipe_images: Array<string>;
+  recipe_images: Array<RecipeImage>;
 
   constructor(
     id = 0,
