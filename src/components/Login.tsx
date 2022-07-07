@@ -1,22 +1,38 @@
-import React, { useRef, SyntheticEvent } from "react";
+import React, { useRef, SyntheticEvent, useEffect } from "react";
 import { actionCreators } from "../redux";
 import { bindActionCreators } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
+import { useTypedSelector } from "../hooks/useTypedSelector";
+import { UserState } from "../types/userstate";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const dispatch = useDispatch();
+  let navigate = useNavigate();
 
   const loginUser = useRef<HTMLInputElement>(null);
   const loginPass = useRef<HTMLInputElement>(null);
 
   const { login } = bindActionCreators(actionCreators, dispatch);
+  const user: UserState = useTypedSelector((state) => state.user);
 
-  const userLogin = async (e: SyntheticEvent) => {
+  useEffect(() => {
+    if (user.verified === true) {
+      navigate("/");
+    }
+  }, [user.verified]);
+
+  const userLogin = (e: SyntheticEvent) => {
     e.preventDefault();
     if (loginUser.current !== null && loginPass.current !== null) {
-      login(loginUser.current?.value, loginPass.current?.value);
+      try {
+        login(loginUser.current?.value, loginPass.current?.value);
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
+
   return (
     <>
       <h2> Sign in </h2>
@@ -45,6 +61,14 @@ export default function Login() {
           {" "}
           Sign in
         </button>
+        {user.error ? (
+          <p style={{ color: "red" }}>
+            {" "}
+            No account was found with these credentials
+          </p>
+        ) : (
+          ""
+        )}
       </form>
     </>
   );

@@ -1,12 +1,13 @@
 import { LoginInfo } from "./loginInfo";
-import { VerifiedStatus } from "./VerifiedStatus";
 export class UserState {
   loading: Boolean;
+  error: string | null;
   loginInfo: LoginInfo;
-  verified: VerifiedStatus;
+  verified: Boolean;
 
   constructor(
     loading = false,
+    error = null,
     loginInfo = {
       username: "",
       first_name: "",
@@ -18,11 +19,10 @@ export class UserState {
       access: "",
       token: "",
     },
-    verified = {
-      verify: null,
-    }
+    verified = false
   ) {
     this.loading = loading;
+    this.error = error;
     this.loginInfo = loginInfo;
     this.verified = verified;
   }

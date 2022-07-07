@@ -9,7 +9,6 @@ import { useDispatch } from "react-redux";
 const useAuth = () => {
   const dispatch = useDispatch();
   const user: UserState = useTypedSelector((state) => state.user);
-  const [auth, setAuth] = useState<boolean>();
   const { verify } = bindActionCreators(actionCreators, dispatch);
 
   useEffect(() => {
@@ -18,14 +17,12 @@ const useAuth = () => {
     };
     if (user.loginInfo.access !== "") {
       validate();
-      setAuth(true);
+      // setAuth(true);
       return;
     } else {
-      setAuth(false);
+      // setAuth(false);
     }
   }, []);
-
-  return auth;
 };
 
 export default useAuth;
