@@ -4,18 +4,11 @@ import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useParams } from "react-router-dom";
 import { UserState } from "../types/userstate";
 import { Profile } from "../types/profile";
-
+import RecipeCard from "../components/RecipeCard";
 export default function ProfilePage() {
   const user: UserState = useTypedSelector((state) => state.user);
   const { username } = useParams();
   const [userProf, setUserProf] = useState<Profile>();
-
-  const config = {
-    headers: {
-      "Content-type": "application/json",
-      Authorization: `Bearer ${user.loginInfo.access}`,
-    },
-  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -23,7 +16,12 @@ export default function ProfilePage() {
         try {
           const { data } = await axios.get(
             `http://localhost:8000/api/myprofile`,
-            config
+            {
+              headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${user.loginInfo.access}`,
+              },
+            }
           );
           setUserProf(data);
         } catch (err) {
@@ -35,56 +33,42 @@ export default function ProfilePage() {
   }, [user, username]);
 
   return (
-    <div className="p-5">
-      {userProf ? (
-        <h1 style={{ textAlign: "left" }}>
-          {userProf.username} - {userProf.first_name} {userProf.last_name}{" "}
-        </h1>
-      ) : (
-        ""
-      )}
-      {userProf ? (
-        <img
-          src={`http://localhost:8000/static${userProf.profile_pic}`} // this is weird and will be changed when we move to an S3 Bucket
-          alt="user profile img"
-          style={{ borderRadius: "50%", padding: "15px" }}
-          width="250px"
-        />
-      ) : (
-        ""
-      )}
+    <div className="p-5 flex flex-row">
+      <div className="w-1/3">
+        {userProf ? (
+          <h1 style={{ textAlign: "left" }}>
+            {userProf.username} - {userProf.first_name} {userProf.last_name}{" "}
+          </h1>
+        ) : (
+          ""
+        )}
+        {userProf ? (
+          <img
+            src={`http://localhost:8000/static${userProf.profile_pic}`} // this is weird and will be changed when we move to an S3 Bucket
+            alt="user profile img"
+            className="w-1/2 rounded-full"
+          />
+        ) : (
+          ""
+        )}
+        <h2 className="mt-5"> Friends </h2>
+        {userProf
+          ? userProf.friends.map((friend) => {
+              return (
+                <h1>
+                  {friend.first_name} {friend.last_name}
+                </h1>
+              );
+            })
+          : ""}
+      </div>
+
       <div>
         <h3>Recipes</h3>
         <div className="flex flex-row">
           {userProf
             ? userProf.recipe_list.map((recipe) => {
-                return (
-                  <div
-                    className="p-5"
-                    style={{
-                      backgroundColor: "rgba(0,0,0,0.4)",
-                      color: "white",
-                      width: "25vw",
-                      margin: "1%",
-                    }}
-                  >
-                    {recipe.recipe_images.length > 0 ? (
-                      <img
-                        src={`http://localhost:8000/static${recipe.recipe_images[0].img}`}
-                        alt="uploaded recipe"
-                        width="100px"
-                        style={{ float: "left" }}
-                      />
-                    ) : (
-                      ""
-                    )}{" "}
-                    <h2>
-                      <strong>{recipe.title}</strong>
-                    </h2>
-                    <h5>-{recipe.catagory}</h5>
-                    <p>{recipe.description}</p>
-                  </div>
-                );
+                return <RecipeCard recipe={recipe} />;
               })
             : ""}
         </div>

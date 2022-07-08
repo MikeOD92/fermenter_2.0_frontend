@@ -32,7 +32,15 @@ const Header: FC = () => {
             <li className="p-5">
               <Link to="/">Feed</Link>{" "}
             </li>
-            <li className="p-5"> Profile </li>
+
+            {user?.verified ? (
+              <li className="p-5">
+                <Link to={`/${user.loginInfo.username}`}>Profile</Link>{" "}
+              </li>
+            ) : (
+              ""
+            )}
+
             <li className="p-5"> Friends</li>
           </ul>
         </nav>
