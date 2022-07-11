@@ -4,33 +4,50 @@ import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useParams } from "react-router-dom";
 import { UserState } from "../types/userstate";
 import { Profile } from "../types/profile";
+import { Friend } from "../types/friend";
 import RecipeCard from "../components/RecipeCard";
 export default function ProfilePage() {
   const user: UserState = useTypedSelector((state) => state.user);
   const { username } = useParams();
   const [userProf, setUserProf] = useState<Profile>();
+  const [friendList, setFriendList] = useState<Array<Friend>>([]);
 
   useEffect(() => {
     const fetchUser = async () => {
       if (user.loginInfo.username === username) {
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${user.loginInfo.access}`,
+          },
+        };
         try {
           const { data } = await axios.get(
             `http://localhost:8000/api/myprofile`,
-            {
-              headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${user.loginInfo.access}`,
-              },
-            }
+            config
           );
           setUserProf(data);
+          let friendData = [];
+
+          for (let x in data.friends) {
+            try {
+              const friend = await axios.get(
+                `http://localhost:8000/api/users/${data.friends[x]}`,
+                config
+              );
+              friendData.push(friend.data);
+            } catch (err) {
+              console.error(err);
+            }
+          }
+          setFriendList(friendData);
         } catch (err) {
           console.error(err);
         }
       }
     };
     fetchUser();
-  }, [user, username]);
+  }, []);
 
   return (
     <div className="p-5 flex flex-row">
@@ -44,7 +61,7 @@ export default function ProfilePage() {
         )}
         {userProf ? (
           <img
-            src={`http://localhost:8000/static${userProf.profile_pic}`} // this is weird and will be changed when we move to an S3 Bucket
+            src={`http://localhost:8000/static${userProf.profile_pic}`} // remove localhost
             alt="user profile img"
             className="w-1/2 rounded-full"
           />
@@ -52,23 +69,33 @@ export default function ProfilePage() {
           ""
         )}
         <h2 className="mt-5"> Friends </h2>
-        {userProf
-          ? userProf.friends.map((friend) => {
-              return (
-                <h1>
-                  {friend.first_name} {friend.last_name}
-                </h1>
-              );
-            })
-          : ""}
+        <div className="flex flex-row">
+          {friendList
+            ? friendList.map((friend, i) => {
+                /// once this is bigger is will need to select a set number of random friends
+                return (
+                  <div key={`friend ${i}`}>
+                    <a href={`/${friend.username}`}>
+                      <img
+                        src={`http://localhost:8000/static${friend.profile_pic}`} // remove localhost
+                        alt="user profile img"
+                        style={{ margin: "5px" }}
+                        className="h-20 w-20 rounded-full"
+                      />
+                    </a>
+                  </div>
+                );
+              })
+            : ""}
+        </div>
       </div>
 
       <div>
         <h3>Recipes</h3>
         <div className="flex flex-row">
           {userProf
-            ? userProf.recipe_list.map((recipe) => {
-                return <RecipeCard recipe={recipe} />;
+            ? userProf.recipe_list.map((recipe, i) => {
+                return <RecipeCard recipe={recipe} key={i} />;
               })
             : ""}
         </div>
