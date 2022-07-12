@@ -6,10 +6,9 @@ const RecipeCard: FC<{
 }> = ({ recipe }) => {
   return (
     <div
-      className="p-5 bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 rounded"
+      className="p-5 bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 rounded text-white"
       style={{
-        color: "white",
-        width: "30vw",
+        width: "25vw",
         margin: "1%",
       }}
     >
@@ -29,6 +28,9 @@ const RecipeCard: FC<{
         </h2>
         <h5>-{recipe.catagory}</h5>
         <p>{recipe.description}</p>
+      </div>
+      <div className="mt-3 text-black underline">
+        <a href={`recipe/${recipe.id}`}> View Recipe</a>
       </div>
     </div>
   );

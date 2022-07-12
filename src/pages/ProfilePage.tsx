@@ -6,6 +6,7 @@ import { UserState } from "../types/userstate";
 import { Profile } from "../types/profile";
 import { Friend } from "../types/friend";
 import RecipeCard from "../components/RecipeCard";
+
 export default function ProfilePage() {
   const user: UserState = useTypedSelector((state) => state.user);
   const { username } = useParams();
@@ -14,36 +15,35 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      if (user.loginInfo.username === username) {
-        const config = {
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${user.loginInfo.access}`,
-          },
-        };
-        try {
-          const { data } = await axios.get(
-            `http://localhost:8000/api/myprofile`,
-            config
-          );
-          setUserProf(data);
-          let friendData = [];
-
-          for (let x in data.friends) {
-            try {
-              const friend = await axios.get(
-                `http://localhost:8000/api/users/${data.friends[x]}`,
-                config
-              );
-              friendData.push(friend.data);
-            } catch (err) {
-              console.error(err);
-            }
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.loginInfo.access}`,
+        },
+      };
+      try {
+        const { data } = await axios.get(
+          `http://localhost:8000/api/profile${
+            user.loginInfo.username === username ? "" : `/${username}`
+          }`,
+          config
+        );
+        setUserProf(data);
+        let friendData = [];
+        for (let x in data.friends) {
+          try {
+            const friend = await axios.get(
+              `http://localhost:8000/api/users/${data.friends[x]}`,
+              config
+            );
+            friendData.push(friend.data);
+          } catch (err) {
+            console.error(err);
           }
-          setFriendList(friendData);
-        } catch (err) {
-          console.error(err);
         }
+        setFriendList(friendData);
+      } catch (err) {
+        console.error(err);
       }
     };
     fetchUser();
