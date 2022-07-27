@@ -6,6 +6,7 @@ import Portal from "./pages/Portal";
 import ProfilePage from "./pages/ProfilePage";
 import Recipe from "./pages/RecipePage";
 import RecipePage from "./pages/RecipePage";
+import Friends from "./pages/Friends";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
           <Route path={"/login"} element={<Portal />} />
           <Route path={"/recipe/:id"} element={<RecipePage />} />
           <Route path={"/:username"} element={<ProfilePage />} />
+          <Route path={"/friends"} element={<Friends />} />
         </Routes>
       </main>
     </div>

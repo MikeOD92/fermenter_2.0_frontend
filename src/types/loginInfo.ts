@@ -1,3 +1,5 @@
+import { Friend } from "./friend";
+
 export class LoginInfo {
   username: string;
   first_name: string;
@@ -8,7 +10,8 @@ export class LoginInfo {
   refresh: string;
   access: string;
   token: string;
-  //   friends = Array;
+  friends: Array<Friend>;
+
   constructor(
     username = "",
     first_name = "",
@@ -18,7 +21,8 @@ export class LoginInfo {
     profile_pic = "",
     refresh = "",
     access = "",
-    token = ""
+    token = "",
+    friends = []
   ) {
     this.username = username;
     this.first_name = first_name;
@@ -29,5 +33,6 @@ export class LoginInfo {
     this.refresh = refresh;
     this.access = access;
     this.token = token;
+    this.friends = friends;
   }
 }

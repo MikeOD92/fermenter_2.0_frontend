@@ -4,6 +4,7 @@ export class Recipe {
   id: number;
   title: string;
   user: number;
+  author: string;
   catagory: string;
   description: string;
   ingredients: string;
@@ -15,6 +16,7 @@ export class Recipe {
     id = 0,
     title = "",
     user = 0,
+    author = "",
     catagory = "",
     description = "",
     ingredients = "",
@@ -25,6 +27,7 @@ export class Recipe {
     this.id = id;
     this.title = title;
     this.user = user;
+    this.author = author;
     this.catagory = catagory;
     this.description = description;
     this.ingredients = ingredients;

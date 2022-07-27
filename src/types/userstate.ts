@@ -18,6 +18,7 @@ export class UserState {
       refresh: "",
       access: "",
       token: "",
+      friends: [],
     },
     verified = false
   ) {

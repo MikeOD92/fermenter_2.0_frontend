@@ -32,7 +32,7 @@ export default function RecipePage() {
       <div className="m-7">
         <div className="mb-7">
           <h1>{recipe ? recipe.title : ""}</h1>
-          <p> Author: {recipe ? recipe.user : ""}</p>
+          <p> By: {recipe ? recipe.author : ""}</p>
           <p>{recipe ? recipe.catagory : ""}</p>
         </div>
 
