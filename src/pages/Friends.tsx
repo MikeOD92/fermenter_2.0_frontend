@@ -1,38 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+
 import { useTypedSelector } from "../hooks/useTypedSelector";
-import { useParams } from "react-router-dom";
+
 import { UserState } from "../types/userstate";
-import { Profile } from "../types/profile";
-import { Friend } from "../types/friend";
 
 export default function Friends() {
   const user: UserState = useTypedSelector((state) => state.user);
-  const [friendList, setFriendList] = useState<Array<Friend>>();
-
-  useEffect(() => {
-    const fetch = async () => {
-      let friendData = [];
-      for (let x of user.loginInfo.friends) {
-        try {
-          const friend = await axios.get(
-            `http://localhost:8000/api/users/${x}`,
-            {
-              headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${user.loginInfo.access}`,
-              },
-            }
-          );
-          friendData.push(friend.data);
-        } catch (err) {
-          console.error(err);
-        }
-      }
-      setFriendList(friendData);
-    };
-    fetch();
-  }, []);
 
   const friends = user.loginInfo.friends;
   console.log(friends);
@@ -40,9 +13,23 @@ export default function Friends() {
   return (
     <div>
       Friends
-      {friendList
-        ? friendList.map((friend) => {
-            return <h2>{friend.username}</h2>;
+      {friends
+        ? friends.map((friend) => {
+            return (
+              <div>
+                <img
+                  className="h-20 w-20 rounded-full"
+                  src={`http://localhost:8000/static${friend.profile_pic}`}
+                  alt="user profile"
+                />
+                <div>
+                  <h2>{friend.username}</h2>
+                </div>
+                <div>
+                  <h4>{friend.email}</h4>
+                </div>
+              </div>
+            );
           })
         : ""}
     </div>

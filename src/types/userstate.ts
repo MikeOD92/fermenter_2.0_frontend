@@ -19,6 +19,7 @@ export class UserState {
       access: "",
       token: "",
       friends: [],
+      recipe_list: [],
     },
     verified = false
   ) {

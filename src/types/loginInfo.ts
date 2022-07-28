@@ -1,4 +1,5 @@
 import { Friend } from "./friend";
+import { Recipe } from "./recipe";
 
 export class LoginInfo {
   username: string;
@@ -11,6 +12,7 @@ export class LoginInfo {
   access: string;
   token: string;
   friends: Array<Friend>;
+  recipe_list: Array<Recipe>;
 
   constructor(
     username = "",
@@ -22,7 +24,8 @@ export class LoginInfo {
     refresh = "",
     access = "",
     token = "",
-    friends = []
+    friends = [],
+    recipe_list = []
   ) {
     this.username = username;
     this.first_name = first_name;
@@ -34,5 +37,6 @@ export class LoginInfo {
     this.access = access;
     this.token = token;
     this.friends = friends;
+    this.recipe_list = recipe_list;
   }
 }

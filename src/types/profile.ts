@@ -1,3 +1,4 @@
+import { Friend } from "./friend";
 import { Recipe } from "./recipe";
 
 export class Profile {
@@ -6,7 +7,7 @@ export class Profile {
   last_name: string;
   email: string;
   profile_pic: string;
-  friends: Array<Profile>;
+  friends: Array<Friend>;
   recipe_list: Array<Recipe>;
 
   constructor(

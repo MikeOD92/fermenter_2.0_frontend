@@ -10,40 +10,36 @@ import RecipeCard from "../components/RecipeCard";
 export default function ProfilePage() {
   const user: UserState = useTypedSelector((state) => state.user);
   const { username } = useParams();
-  const [userProf, setUserProf] = useState<Profile>();
-  const [friendList, setFriendList] = useState<Array<Friend>>([]);
+  const [profData, setProfData] = useState<Profile>();
 
   useEffect(() => {
     const fetchUser = async () => {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${user.loginInfo.access}`,
-        },
-      };
-      try {
-        const { data } = await axios.get(
-          `http://localhost:8000/api/profile${
-            user.loginInfo.username === username ? "" : `/${username}`
-          }`,
-          config
-        );
-        setUserProf(data);
-        let friendData = [];
-        for (let x in data.friends) {
-          try {
-            const friend = await axios.get(
-              `http://localhost:8000/api/users/${data.friends[x]}`,
-              config
-            );
-            friendData.push(friend.data);
-          } catch (err) {
-            console.error(err);
-          }
+      if (user.loginInfo.username === username) {
+        setProfData({
+          username: user.loginInfo.username,
+          first_name: user.loginInfo.first_name,
+          last_name: user.loginInfo.last_name,
+          email: user.loginInfo.email,
+          profile_pic: user.loginInfo.profile_pic,
+          friends: user.loginInfo.friends,
+          recipe_list: user.loginInfo.recipe_list,
+        });
+      } else {
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${user.loginInfo.access}`,
+          },
+        };
+        try {
+          const { data } = await axios.get(
+            `http://localhost:8000/api/profile${`/${username}`}`,
+            config
+          );
+          setProfData(data);
+        } catch (err) {
+          console.error(err);
         }
-        setFriendList(friendData);
-      } catch (err) {
-        console.error(err);
       }
     };
     fetchUser();
@@ -52,16 +48,16 @@ export default function ProfilePage() {
   return (
     <div className="p-5 flex flex-row">
       <div className="w-1/3">
-        {userProf ? (
+        {profData ? (
           <h1 style={{ textAlign: "left" }}>
-            {userProf.username} - {userProf.first_name} {userProf.last_name}{" "}
+            {profData.username} - {profData.first_name} {profData.last_name}{" "}
           </h1>
         ) : (
           ""
         )}
-        {userProf ? (
+        {profData ? (
           <img
-            src={`http://localhost:8000/static${userProf.profile_pic}`} // remove localhost
+            src={`http://localhost:8000/static${profData.profile_pic}`} // remove localhost
             alt="user profile img"
             className="w-1/2 rounded-full"
           />
@@ -70,8 +66,8 @@ export default function ProfilePage() {
         )}
         <h2 className="mt-5"> Friends </h2>
         <div className="flex flex-row">
-          {friendList
-            ? friendList.map((friend, i) => {
+          {profData?.friends
+            ? profData.friends.map((friend, i) => {
                 /// once this is bigger is will need to select a set number of random friends
                 return (
                   <div key={`friend ${i}`}>
@@ -93,8 +89,8 @@ export default function ProfilePage() {
       <div>
         <h3>Recipes</h3>
         <div className="flex flex-row">
-          {userProf
-            ? userProf.recipe_list.map((recipe, i) => {
+          {profData
+            ? profData.recipe_list.map((recipe, i) => {
                 return <RecipeCard recipe={recipe} key={i} />;
               })
             : ""}
