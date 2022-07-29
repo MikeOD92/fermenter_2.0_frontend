@@ -8,7 +8,7 @@ export default function Friends() {
   const user: UserState = useTypedSelector((state) => state.user);
 
   const friends = user.loginInfo.friends;
-  console.log(friends);
+  // console.log(friends);
 
   return (
     <div>

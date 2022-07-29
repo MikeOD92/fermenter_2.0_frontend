@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useTypedSelector } from "../hooks/useTypedSelector";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { UserState } from "../types/userstate";
 import { Profile } from "../types/profile";
 import { Friend } from "../types/friend";
@@ -46,54 +46,66 @@ export default function ProfilePage() {
   }, []);
 
   return (
-    <div className="p-5 flex flex-row">
-      <div className="w-1/3">
-        {profData ? (
-          <h1 style={{ textAlign: "left" }}>
-            {profData.username} - {profData.first_name} {profData.last_name}{" "}
-          </h1>
-        ) : (
-          ""
-        )}
-        {profData ? (
-          <img
-            src={`http://localhost:8000/static${profData.profile_pic}`} // remove localhost
-            alt="user profile img"
-            className="w-1/2 rounded-full"
-          />
-        ) : (
-          ""
-        )}
-        <h2 className="mt-5"> Friends </h2>
-        <div className="flex flex-row">
-          {profData?.friends
-            ? profData.friends.map((friend, i) => {
-                /// once this is bigger is will need to select a set number of random friends
-                return (
-                  <div key={`friend ${i}`}>
-                    <a href={`/${friend.username}`}>
-                      <img
-                        src={`http://localhost:8000/static${friend.profile_pic}`} // remove localhost
-                        alt="user profile img"
-                        style={{ margin: "5px" }}
-                        className="h-20 w-20 rounded-full"
-                      />
-                    </a>
-                  </div>
-                );
-              })
-            : ""}
+    <div>
+      <div className="p-5 flex flex-row">
+        <div className="w-1/3">
+          {profData ? (
+            <h1 style={{ textAlign: "left" }}>
+              {profData.username} - {profData.first_name} {profData.last_name}{" "}
+            </h1>
+          ) : (
+            ""
+          )}
+          {profData ? (
+            <img
+              src={`http://localhost:8000/static${profData.profile_pic}`} // remove localhost
+              alt="user profile img"
+              className="w-1/2 rounded-full"
+            />
+          ) : (
+            ""
+          )}
+          <h2 className="mt-5"> Friends </h2>
+          <div className="flex flex-row">
+            {profData?.friends
+              ? profData.friends.map((friend, i) => {
+                  /// once this is bigger is will need to select a set number of random friends
+                  return (
+                    <div key={`friend ${i}`}>
+                      <a href={`/${friend.username}`}>
+                        <img
+                          src={`http://localhost:8000/static${friend.profile_pic}`} // remove localhost
+                          alt="user profile img"
+                          style={{ margin: "5px" }}
+                          className="h-20 w-20 rounded-full"
+                        />
+                      </a>
+                    </div>
+                  );
+                })
+              : ""}
+          </div>
+        </div>
+
+        <div>
+          <h3>Recipes</h3>
+          <div className="flex flex-row">
+            {profData
+              ? profData.recipe_list.map((recipe, i) => {
+                  return <RecipeCard recipe={recipe} key={i} />;
+                })
+              : ""}
+          </div>
         </div>
       </div>
-
       <div>
-        <h3>Recipes</h3>
-        <div className="flex flex-row">
-          {profData
-            ? profData.recipe_list.map((recipe, i) => {
-                return <RecipeCard recipe={recipe} key={i} />;
-              })
-            : ""}
+        <div>
+          <h3> Add Recipe</h3>
+          <Link to={"/new-recipe"}>
+            <button className="bg-black text-white font-bold w-7 h-7 rounded-full text-center">
+              +
+            </button>
+          </Link>
         </div>
       </div>
     </div>

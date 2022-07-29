@@ -4,9 +4,9 @@ import Header from "./components/Header";
 import Home from "./pages/Home";
 import Portal from "./pages/Portal";
 import ProfilePage from "./pages/ProfilePage";
-import Recipe from "./pages/RecipePage";
 import RecipePage from "./pages/RecipePage";
 import Friends from "./pages/Friends";
+import NewRecipe from "./pages/NewRecipe";
 
 const App = () => {
   return (
@@ -17,8 +17,9 @@ const App = () => {
           <Route path={"/"} element={<Home />} />
           <Route path={"/login"} element={<Portal />} />
           <Route path={"/recipe/:id"} element={<RecipePage />} />
-          <Route path={"/:username"} element={<ProfilePage />} />
           <Route path={"/friends"} element={<Friends />} />
+          <Route path={"/new-recipe"} element={<NewRecipe />} />
+          <Route path={"/:username"} element={<ProfilePage />} />
         </Routes>
       </main>
     </div>
