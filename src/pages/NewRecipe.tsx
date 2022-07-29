@@ -14,7 +14,40 @@ export default function NewRecipe() {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log("submission");
+    console.log({
+      title: title?.current?.value,
+      user: user.loginInfo.id,
+      author: user.loginInfo.username,
+      description: description?.current?.value,
+      ingredients: ingredients?.current?.value,
+      method: method?.current?.value,
+      comments: [],
+      recipe_images: [],
+    });
+    try {
+      await axios.post(
+        "http://localhost:8000/api/recipes/create/",
+        {
+          title: title?.current?.value,
+          user: user.loginInfo.id,
+          author: user.loginInfo.username,
+          catagory: catagory?.current?.value,
+          description: description?.current?.value,
+          ingredients: ingredients?.current?.value,
+          method: method?.current?.value,
+          comments: [],
+          recipe_images: [],
+        },
+        {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${user.loginInfo.access}`,
+          },
+        }
+      );
+    } catch (err) {
+      console.error(err);
+    }
   };
   return (
     <div>

@@ -62,11 +62,19 @@ export default function RecipePage() {
 
           <div className="w-4/5 m-10 text-left">
             <h2> Description</h2>
-            <p>{recipe ? recipe.description : ""}</p>
+            <p style={{ whiteSpace: "pre-wrap" }}>
+              {recipe ? recipe.description : ""}
+            </p>
             <h2> Ingredients</h2>
-            <p> {recipe ? recipe.ingredients : ""}</p>
+            <p style={{ whiteSpace: "pre-wrap" }}>
+              {" "}
+              {recipe ? recipe.ingredients : ""}
+            </p>
             <h2> Method</h2>
-            <p> {recipe ? recipe.method : ""}</p>
+            <p style={{ whiteSpace: "pre-wrap" }}>
+              {" "}
+              {recipe ? recipe.method : ""}
+            </p>
           </div>
         </div>
       </div>

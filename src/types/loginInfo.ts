@@ -2,6 +2,7 @@ import { Friend } from "./friend";
 import { Recipe } from "./recipe";
 
 export class LoginInfo {
+  id: number;
   username: string;
   first_name: string;
   last_name: string;
@@ -15,6 +16,7 @@ export class LoginInfo {
   recipe_list: Array<Recipe>;
 
   constructor(
+    id = 0,
     username = "",
     first_name = "",
     last_name = "",
@@ -27,6 +29,7 @@ export class LoginInfo {
     friends = [],
     recipe_list = []
   ) {
+    this.id = id;
     this.username = username;
     this.first_name = first_name;
     this.last_name = last_name;

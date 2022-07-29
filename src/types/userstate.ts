@@ -9,6 +9,7 @@ export class UserState {
     loading = false,
     error = null,
     loginInfo = {
+      id: 0,
       username: "",
       first_name: "",
       last_name: "",
