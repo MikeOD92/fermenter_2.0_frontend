@@ -87,9 +87,19 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <div>
-          <h3>Recipes</h3>
-          <div className="flex flex-row">
+        <div className="w-4/6 rounded-lg shadow-inner bg-zinc-300 flex flex-col">
+          <div className="align-self-center w-2/4 py-5">
+            <h3
+              className="overline decoration-dotted"
+              style={{
+                fontSize: "42px",
+              }}
+            >
+              _Recipes
+            </h3>
+          </div>
+
+          <div className="flex flex-row flex-wrap p-5 place-content-evenly">
             {profData
               ? profData.recipe_list.map((recipe, i) => {
                   return <RecipeCard recipe={recipe} key={i} />;
